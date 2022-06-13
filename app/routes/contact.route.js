@@ -11,7 +11,7 @@ router.route("/favorite")
   .get(contactController.findAllFavorite)
 
 router.route("/:id")
-  .get(contactController.findAllFavorite)
+  .get(contactController.findOne)
   .put(contactController.update)
   .delete(contactController.delete)
 
