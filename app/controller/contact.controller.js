@@ -61,15 +61,46 @@ export default {
       const contactService = new ContactService(MongoDB.client)
       const document = await contactService.update(req.params.id, req.body)
       console.log(req.params.id)
-      if(!document){
+      if (!document) {
         return next(new ApiError(404, "Contact not found"))
       }
+
+      return res.send({ message: "Contact was updated successfully" })
     } catch (err) {
       return next(new ApiError(500), `Error updating contact with id=${req.paramsid}`)
 
     }
   },
-  delete: (req, res) => { res.send({ message: "delete handler" }) },
-  deleteAll: (req, res) => { res.send({ message: "deleteAll handler" }) },
-  findAllFavorite: (req, res) => { res.send({ message: "findAllFavorite handler" }) }
+  delete: async (req, res) => {
+    try {
+      const contactService = new ContactService(MongoDB.client)
+      const document = await contactService.delete(req.params.id)
+
+      if (!document) {
+        return next(new ApiError(404, "Contact not found"))
+      }
+
+      return res.send({ message: "Contact was deleted successfully" })
+    } catch (err) {
+      return next(new ApiError(500, `Could not delete contact with id=${req.params.id}`))
+    }
+  },
+  deleteAll: async (req, res) => {
+    try {
+      const contactService = new ContactService(MongoDB.client)
+      const deleteCount = await contactService.deleteAll()
+      return res.send({ message: `${deleteCount} contacts were deleted successfully` })
+    } catch (err) {
+      return next(new ApiError(500, "An error occurred while removing all contacts"))
+    }
+  },
+  findAllFavorite: async (req, res) => {
+    try {
+      const contactService = new ContactService(MongoDB.client)
+      const documents = await contactService.findFavorite()
+      return res.send(documents)
+    } catch (err) {
+      return next(new ApiError(500, "An error occurred while retrieving favorite contacts"))
+    }
+  }
 }

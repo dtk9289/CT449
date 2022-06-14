@@ -59,7 +59,24 @@ export default class ContactService {
       { $set: update },
       { returnDocument: "after" }
     )
-
+    console.log("62",result)
     return result.value
   }
+
+  async delete(id){
+    const result = await this.Contact.findOneAndDelete({
+      _id: ObjectId.isValid(id)? new ObjectId(id): null
+    })
+    return result.value
+  }
+
+  async deleteAll(){
+    const result = await this.Contact.deleteMany({})
+    return result.deleteCount
+  }
+
+  async findFavorite(){
+    return await this.find({favorite: true})
+  }
+
 }
