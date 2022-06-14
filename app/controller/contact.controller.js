@@ -71,7 +71,7 @@ export default {
 
     }
   },
-  delete: async (req, res) => {
+  delete: async (req, res, next) => {
     try {
       const contactService = new ContactService(MongoDB.client)
       const document = await contactService.delete(req.params.id)
@@ -85,7 +85,7 @@ export default {
       return next(new ApiError(500, `Could not delete contact with id=${req.params.id}`))
     }
   },
-  deleteAll: async (req, res) => {
+  deleteAll: async (req, res, next) => {
     try {
       const contactService = new ContactService(MongoDB.client)
       const deleteCount = await contactService.deleteAll()
@@ -94,7 +94,7 @@ export default {
       return next(new ApiError(500, "An error occurred while removing all contacts"))
     }
   },
-  findAllFavorite: async (req, res) => {
+  findAllFavorite: async (req, res, next) => {
     try {
       const contactService = new ContactService(MongoDB.client)
       const documents = await contactService.findFavorite()
